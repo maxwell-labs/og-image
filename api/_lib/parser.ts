@@ -14,7 +14,7 @@ export function parseRequest(req: IncomingMessage) {
         throw new Error('Expected a single theme');
     }
     
-    const arr = pathname.slice(1).split('.');
+    const arr = pathname ? pathname.slice(1).split('.') : [];
     let extension = '';
     let text = '';
     if (arr.length === 0) {
