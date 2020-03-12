@@ -93,7 +93,7 @@ function getCss(fontSize: string) {
         font-size: ${sanitizeHtml(fontSize)};
         font-style: normal;
         color: #1C7851;
-        line-height: 1.8;
+        line-height: 1.2;
     }`;
 }
 
