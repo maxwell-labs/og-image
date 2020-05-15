@@ -1,22 +1,25 @@
-
-import { readFileSync } from 'fs';
-import marked from 'marked';
-import { sanitizeHtml } from './sanitizer';
-import { ParsedRequest } from './types';
-const twemoji = require('twemoji');
-const twOptions = { folder: 'svg', ext: '.svg' };
+import { readFileSync } from "fs";
+import marked from "marked";
+import { sanitizeHtml } from "./sanitizer";
+import { ParsedRequest } from "./types";
+const twemoji = require("twemoji");
+const twOptions = { folder: "svg", ext: ".svg" };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../_fonts/ChaletLondonNineteenSeventy.ttf`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/ChaletNewYorkNineteenEighty.ttf`).toString('base64');
-const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
+const rglr = readFileSync(
+  `${__dirname}/../_fonts/ChaletLondonNineteenEighty.otf`
+).toString("base64");
+const bold = readFileSync(
+  `${__dirname}/../_fonts/ChaletNewYorkNineteenEighty.ttf`
+).toString("base64");
+const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString(
+  "base64"
+);
 
-const background = readFileSync(`${__dirname}/../_fonts/starburst.svg`).toString('base64');
+// const background = readFileSync(`${__dirname}/../_fonts/starburst.svg`).toString('base64');
 
 function getCss(fontSize: string) {
-
-
-    return `
+  return `
     @font-face {
         font-family: 'Chalet';
         font-style:  normal;
@@ -39,7 +42,6 @@ function getCss(fontSize: string) {
       }
 
     body {
-        background: url(data:image/svg+xml;base64,${background}) no-repeat center center fixed; 
         background-size: cover;
         height: 100vh;
         display: flex;
@@ -98,8 +100,8 @@ function getCss(fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-    const { text, md, fontSize, images, widths, heights } = parsedReq;
-    return `<!DOCTYPE html>
+  const { text, md, fontSize, images, widths, heights } = parsedReq;
+  return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
     <title>Generated Image</title>
@@ -111,30 +113,33 @@ export function getHtml(parsedReq: ParsedRequest) {
         <div>
             <div class="spacer">
             <div class="logo-wrapper">
-                ${images.map((img, i) =>
-        getPlusSign(i) + getImage(img, widths[i], heights[i])
-    ).join('')}
+                ${images
+                  .map(
+                    (img, i) =>
+                      getPlusSign(i) + getImage(img, widths[i], heights[i])
+                  )
+                  .join("")}
             </div>
             <div class="spacer">
             <div class="heading">${emojify(
-        md ? marked(text) : sanitizeHtml(text)
-    )}
+              md ? marked(text) : sanitizeHtml(text)
+            )}
             </div>
         </div>
     </body>
 </html>`;
 }
 
-function getImage(src: string, width = 'auto', height = '300') {
-    return `<img
+function getImage(src: string, width = "auto", height = "300") {
+  return `<img
         class="logo"
         alt="Generated Image"
         src="${sanitizeHtml(src)}"
         width="${sanitizeHtml(width)}"
         height="${sanitizeHtml(height)}"
-    />`
+    />`;
 }
 
 function getPlusSign(i: number) {
-    return i === 0 ? '' : '<div class="plus">+</div>';
+  return i === 0 ? "" : '<div class="plus">+</div>';
 }
